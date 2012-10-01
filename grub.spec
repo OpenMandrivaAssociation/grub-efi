@@ -1,6 +1,6 @@
 Name: grub-efi
 Version: 0.97
-Release: 93%{?dist}
+Release: 93
 Epoch: 1
 Summary: Grand Unified Boot Loader.
 Group: System Environment/Base
@@ -48,12 +48,12 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 
 %prep
 %setup -q
-git init
-git config user.email "pjones@fedoraproject.org"
-git config user.name "Fedora Ninjas"
-git add .
-git commit -a -q -m "%{version} baseline."
-git am %{patches}
+#git init
+#git config user.email "pjones@fedoraproject.org"
+#git config user.name "Fedora Ninjas"
+#git add .
+#git commit -a -q -m "%{version} baseline."
+#git am %{patches}
 
 # Modify grub to show the full version number
 sed -i 's/0\.97/%{version}-%{release}/' configure.in
@@ -62,7 +62,7 @@ sed -i 's/0\.97/%{version}-%{release}/' configure.in
 autoreconf
 autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-Os -g -fno-strict-aliasing -Wall -Werror -Wno-shadow -Wno-unused"
+CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Werror -Wno-shadow -Wno-unused -fuse-ld=bfd"
 if [ "$GCCVERS" == "4" ]; then
 	CFLAGS="$CFLAGS -Wno-pointer-sign"
 fi
