@@ -1,0 +1,24 @@
+From 1758d5b5c012c152e139cfb4bc100d64c4fd8f3f Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Thu, 19 Apr 2012 15:19:23 -0400
+Subject: [PATCH] Make sure align is initialised
+
+---
+ efi/x86_64/loader/linux.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+index a54bd88..cf800e1 100644
+--- a/efi/x86_64/loader/linux.c
++++ b/efi/x86_64/loader/linux.c
+@@ -374,7 +374,7 @@ grub_load_linux (char *kernel, char *arg)
+   grub_uint64_t kernel_base, kernel_length, kernel_pages;
+   grub_ssize_t len;
+   char *dest;
+-  int align, min_alignment;
++  int align = 0, min_alignment;
+   int relocatable = 0;
+ 
+   if (kernel == NULL)
+-- 
+1.7.10
+

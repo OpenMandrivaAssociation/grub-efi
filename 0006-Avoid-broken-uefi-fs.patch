@@ -1,0 +1,55 @@
+From 1ccd18babed6463dc2f57ed60542deacf8d5fcaf Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Wed, 25 Apr 2012 16:40:11 -0400
+Subject: [PATCH] Deal with buggy firmware filesystem implementations
+
+Some Apple firmwares don't increment buffersize when returning
+EFI_BUFFER_TOO_SMALL. Hack around that.
+---
+ stage2/fsys_uefi.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/stage2/fsys_uefi.c b/stage2/fsys_uefi.c
+index 58b7050..344fefc 100644
+--- a/stage2/fsys_uefi.c
++++ b/stage2/fsys_uefi.c
+@@ -75,7 +75,7 @@ uefi_dir (char *dirname)
+   grub_efi_char16_t *file_name_w = NULL;
+   grub_efi_char16_t *dir_name_w = NULL;
+   grub_efi_file_info_t *fileinfo = NULL;
+-  grub_efi_uintn_t buffersize = 0;  
++  grub_efi_uintn_t buffersize = 0, prev_buffersize;
+   grub_efi_file_t *directory = NULL;
+   int i, dirlen = 0, ret = 0;
+ 
+@@ -106,9 +106,13 @@ uefi_dir (char *dirname)
+     while (1) {
+       int filenamelen;
+ 
++      prev_buffersize = buffersize;
++
+       status = Call_Service_3 (file->read, file, &buffersize, fileinfo);
+ 
+       if (status == GRUB_EFI_BUFFER_TOO_SMALL) {
++	if (buffersize == prev_buffersize)
++	  buffersize += 1024;
+ 	fileinfo = grub_malloc(buffersize);
+ 	continue;
+       } else if (status) {
+@@ -146,9 +150,13 @@ uefi_dir (char *dirname)
+       int filenamelen;
+       int invalid = 0;
+ 
++      prev_buffersize = buffersize;
++
+       status = Call_Service_3 (directory->read, directory, &buffersize, fileinfo);
+ 
+       if (status == GRUB_EFI_BUFFER_TOO_SMALL) {
++	if (buffersize == prev_buffersize)
++	  buffersize += 1024;
+ 	fileinfo = grub_malloc(buffersize);
+ 	continue;
+       } else if (status) {
+-- 
+1.7.10
+

@@ -1,0 +1,35 @@
+From 894dacfbf272def3a6797c4557899aa05bcbef1d Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Wed, 18 Apr 2012 16:03:52 -0400
+Subject: [PATCH] Move disable_network_devices earlier
+
+This could allocate memory, causing ExitBootServices() to fail.
+---
+ efi/x86_64/loader/linux.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/efi/x86_64/loader/linux.c b/efi/x86_64/loader/linux.c
+index b043821..a54bd88 100644
+--- a/efi/x86_64/loader/linux.c
++++ b/efi/x86_64/loader/linux.c
+@@ -292,6 +292,8 @@ big_linux_boot (void)
+ 
+   graphics_set_kernel_params (params);
+ 
++  grub_efi_disable_network();
++
+   if (grub_efi_get_memory_map (&map_key, &desc_size, &desc_version) <= 0)
+     grub_fatal ("cannot get memory map");
+ 
+@@ -300,8 +302,6 @@ big_linux_boot (void)
+ 			 mmap_buf, desc_size, mmap_size);
+   params->e820_nr_map = e820_nr_map;
+ 
+-  grub_efi_disable_network();
+-
+   if (! grub_efi_exit_boot_services (map_key))
+     grub_fatal ("cannot exit boot services");
+ 
+-- 
+1.7.10
+

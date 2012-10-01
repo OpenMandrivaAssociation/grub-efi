@@ -1,0 +1,27 @@
+From 309d42a6d0627e776d5d1c8d73e6c181c997062e Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Thu, 26 Apr 2012 09:58:02 -0400
+Subject: [PATCH] Really fix getting the correct stride
+
+I am, apparently, not to be trusted.
+---
+ efi/efigraph.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/efi/efigraph.c b/efi/efigraph.c
+index 6905e07..9fbfdfd 100644
+--- a/efi/efigraph.c
++++ b/efi/efigraph.c
+@@ -226,7 +226,8 @@ set_kernel_params(struct graphics_backend *backend,
+     grub_efi_graphics_output_mode_information_t *gop_info = NULL;
+     grub_efi_uintn_t size;
+ 
+-    gop_intf = grub_efi_locate_protocol (&graphics_output_guid, NULL);
++    gop_intf = eg->output_intf;
++
+     if (gop_intf == NULL)
+         return;
+ 
+-- 
+1.7.10
+

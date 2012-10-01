@@ -1,0 +1,27 @@
+From 4c7758fc10be6a22ce82d5f2d4c11152d3ceb5fb Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Wed, 25 Apr 2012 10:38:11 -0400
+Subject: [PATCH] Fix Apple CD fixup
+
+We were taking the device path object length from the wrong bit of the
+device path.
+---
+ efi/efidisk.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/efi/efidisk.c b/efi/efidisk.c
+index 6a505f3..9f7b7b0 100644
+--- a/efi/efidisk.c
++++ b/efi/efidisk.c
+@@ -522,7 +522,7 @@ grub_get_drive_partition_from_bdev_handle (grub_efi_handle_t handle,
+     {
+       grub_efi_uint8_t type = GRUB_EFI_DEVICE_PATH_TYPE (dp1);
+       grub_efi_uint8_t subtype = GRUB_EFI_DEVICE_PATH_SUBTYPE(dp1);
+-      grub_efi_uint16_t len = GRUB_EFI_DEVICE_PATH_LENGTH (dp);
++      grub_efi_uint16_t len = GRUB_EFI_DEVICE_PATH_LENGTH (dp1);
+ 
+       if (type == GRUB_EFI_MEDIA_DEVICE_PATH_TYPE &&
+ 	      subtype == GRUB_EFI_CDROM_DEVICE_PATH_SUBTYPE)
+-- 
+1.7.10
+
