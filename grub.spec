@@ -6,7 +6,7 @@ Summary: Grand Unified Boot Loader.
 Group: System Environment/Base
 License: GPLv2+
 
-ExclusiveArch: x86_64 i686
+ExclusiveArch: x86_64 i586
 BuildRequires: binutils >= 2.9.1.0.23, ncurses-devel, ncurses, texinfo
 BuildRequires: autoconf /usr/lib/crt1.o automake
 BuildRequires: gnu-efi >= 3.0e-9
@@ -41,7 +41,7 @@ systems.
 %package efi
 Summary: GRUB bootloader for EFI systems
 Group: System Environment/Base
-Obsoletes: grub < 1:0.97-83
+Obsoletes: grub < 0.97
 
 %description efi
 GRUB for EFI systems is a bootloader used to boot EFI systems.
@@ -62,7 +62,7 @@ sed -i 's/0\.97/%{version}-%{release}/' configure.in
 autoreconf
 autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Werror -Wno-shadow -Wno-unused -fuse-ld=bfd"
+CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Werror -Wno-shadow -Wno-unused -fuse-ld=bfd"
 if [ "$GCCVERS" == "4" ]; then
 	CFLAGS="$CFLAGS -Wno-pointer-sign"
 fi
