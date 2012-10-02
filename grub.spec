@@ -62,7 +62,7 @@ sed -i 's/0\.97/%{version}-%{release}/' configure.in
 autoreconf
 autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Werror -Wno-shadow -Wno-unused -fuse-ld=bfd"
+CFLAGS="-Os -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Wno-shadow -Wno-unused -fuse-ld=bfd"
 if [ "$GCCVERS" == "4" ]; then
 	CFLAGS="$CFLAGS -Wno-pointer-sign"
 fi
