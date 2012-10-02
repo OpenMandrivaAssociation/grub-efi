@@ -48,15 +48,15 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 
 %prep
 %setup -q
-#git init
-#git config user.email "pjones@fedoraproject.org"
-#git config user.name "Fedora Ninjas"
-#git add .
-#git commit -a -q -m "%{version} baseline."
-#git am %{patches}
+git init
+git config user.email "pjones@fedoraproject.org"
+git config user.name "Fedora Ninjas"
+git add .
+git commit -a -q -m "%{version} baseline."
+git am %{patches}
 
 # Modify grub to show the full version number
-#sed -i 's/0\.97/%{version}-%{release}/' configure.in
+sed -i 's/0\.97/%{version}-%{release}/' configure.in
 
 %build
 autoreconf
