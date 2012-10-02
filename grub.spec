@@ -36,15 +36,7 @@ Patch7: 0008-fix-gop.patch
 GRUB (Grand Unified Boot Loader) is an experimental boot loader
 capable of booting into most free operating systems - Linux, FreeBSD,
 NetBSD, GNU Mach, and others as well as most commercial operating
-systems.
-
-%package efi
-Summary: GRUB bootloader for EFI systems
-Group: System Environment/Base
-Obsoletes: grub < 0.97
-
-%description efi
-GRUB for EFI systems is a bootloader used to boot EFI systems.
+systems. GRUB for EFI systems is a bootloader used to boot EFI systems.
 
 %prep
 %setup -q
@@ -70,13 +62,6 @@ export CFLAGS
 %configure --sbindir=/sbin --disable-auto-linux-mem-opt --datarootdir=%{_datadir} --with-platform=efi
 make
 mv efi/grub.efi .
-make clean
-autoreconf
-autoconf
-CFLAGS="$CFLAGS -static" 
-export CFLAGS
-%configure --sbindir=/sbin --disable-auto-linux-mem-opt --datarootdir=%{_datadir}
-make
 
 %install
 rm -fr $RPM_BUILD_ROOT
@@ -102,9 +87,13 @@ if [ "$1" = 0 ] ;then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
 fi
 
-%files efi
+%files
 %defattr(-,root,root)
 %attr(0755,root,root)/boot/efi/EFI/rosa
+%{_mandir}/man*/*
+%{_datadir}/grub
+%{_infodir}/grub*
+%{_infodir}/multiboot*
 /sbin/grub-terminfo
 /sbin/grub-md5-crypt
 /sbin/grub-crypt
