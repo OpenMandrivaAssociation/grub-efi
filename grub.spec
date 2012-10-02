@@ -102,21 +102,6 @@ if [ "$1" = 0 ] ;then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
 fi
 
-%files
-%defattr(-,root,root)
-%doc AUTHORS ChangeLog NEWS README COPYING TODO docs/menu.lst
-/boot/grub
-/sbin/grub
-/sbin/grub-install
-/sbin/grub-terminfo
-/sbin/grub-md5-crypt
-/sbin/grub-crypt
-%{_bindir}/mbchk
-%{_infodir}/grub*
-%{_infodir}/multiboot*
-%{_mandir}/man*/*
-%{_datadir}/grub
-
 %files efi
 %defattr(-,root,root)
 %attr(0755,root,root)/boot/efi/EFI/rosa
