@@ -20,6 +20,7 @@ Provides: bootloader
 
 URL: http://www.gnu.org/software/%{name}/
 Source0: ftp://alpha.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+Source1: splash.xpm.gz
 
 # This is from
 # http://git.kernel.org/?p=boot/grub-fedora/grub-fedora.git;a=summary
@@ -69,6 +70,7 @@ rm -fr $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}/boot/grub
 mkdir -m 0755 -p ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/
 install -m 755 grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/grub.efi
+install -m 0644 %{SOURCE1} ${RPM_BUILD_ROOT}/boot/grub
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
 
@@ -90,6 +92,7 @@ fi
 %files
 %defattr(-,root,root)
 %attr(0755,root,root)/boot/efi/EFI/rosa
+%attr(0755,root,root)/boot/grub
 %{_mandir}/man*/*
 %{_datadir}/grub
 %{_infodir}/grub*
