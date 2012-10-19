@@ -72,18 +72,6 @@ install -m 0644 %{SOURCE1} ${RPM_BUILD_ROOT}/boot/grub
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
 
-%post
-if [ "$1" = 1 ]; then
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/grub.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
-fi
-
-%preun
-if [ "$1" = 0 ] ;then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/grub.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
-fi
-
 %files
 %attr(0755,root,root)/boot/efi/EFI/rosa
 %attr(0755,root,root)/boot/grub
