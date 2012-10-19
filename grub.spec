@@ -12,14 +12,13 @@ BuildRequires: autoconf /usr/lib/crt1.o automake
 BuildRequires: gnu-efi >= 3.0e-9
 BuildRequires: glibc glibc-static-devel
 BuildRequires: git
-Requires(post): /sbin/install-info
-Requires(preun): /sbin/install-info
 Requires: coreutils
 Provides: bootloader
 
 URL: http://www.gnu.org/software/%{name}/
 Source0: ftp://alpha.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 Source1: splash.xpm.gz
+Source2: %{name}.rpmlintrc
 
 # This is from
 # http://git.kernel.org/?p=boot/grub-fedora/grub-fedora.git;a=summary
