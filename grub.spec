@@ -1,9 +1,9 @@
 Name: grub-efi
 Version: 0.97
-Release: 93
+Release: 94
 Epoch: 1
-Summary: Grand Unified Boot Loader.
-Group: System Environment/Base
+Summary: Grand Unified Boot Loader
+Group: System/Kernel and hardware
 License: GPLv2+
 
 ExclusiveArch: x86_64 i586
@@ -15,7 +15,6 @@ BuildRequires: git
 Requires(post): /sbin/install-info
 Requires(preun): /sbin/install-info
 Requires: coreutils
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Provides: bootloader
 
 URL: http://www.gnu.org/software/%{name}/
@@ -65,7 +64,6 @@ make
 mv efi/grub.efi .
 
 %install
-rm -fr $RPM_BUILD_ROOT
 %makeinstall sbindir=${RPM_BUILD_ROOT}/sbin
 mkdir -p ${RPM_BUILD_ROOT}/boot/grub
 mkdir -m 0755 -p ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/
@@ -73,9 +71,6 @@ install -m 755 grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/grub.efi
 install -m 0644 %{SOURCE1} ${RPM_BUILD_ROOT}/boot/grub
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
-
-%clean
-rm -fr $RPM_BUILD_ROOT
 
 %post
 if [ "$1" = 1 ]; then
@@ -90,7 +85,6 @@ if [ "$1" = 0 ] ;then
 fi
 
 %files
-%defattr(-,root,root)
 %attr(0755,root,root)/boot/efi/EFI/rosa
 %attr(0755,root,root)/boot/grub
 %{_mandir}/man*/*
