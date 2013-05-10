@@ -5,7 +5,7 @@ Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
 
-ExclusiveArch: x86_64 i686
+ExclusiveArch: x86_64 %ix86
 BuildRequires: binutils >= 2.9.1.0.23, ncurses-devel, ncurses, texinfo
 BuildRequires: autoconf /usr/lib/crt1.o automake
 BuildRequires: gnu-efi >= 3.0e-9
