@@ -1,9 +1,8 @@
 Name: grub-efi
 Version: 0.97
-Release: 93
-Epoch: 1
-Summary: Grand Unified Boot Loader.
-Group: System Environment/Base
+Release: 1
+Summary: Grand Unified Boot Loader
+Group: System/Kernel and hardware
 License: GPLv2+
 
 ExclusiveArch: x86_64 i686
@@ -12,10 +11,7 @@ BuildRequires: autoconf /usr/lib/crt1.o automake
 BuildRequires: gnu-efi >= 3.0e-9
 BuildRequires: glibc glibc-static-devel
 BuildRequires: git
-Requires(post): /sbin/install-info
-Requires(preun): /sbin/install-info
 Requires: coreutils
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Provides: bootloader
 
 URL: http://www.gnu.org/software/%{name}/
@@ -31,6 +27,7 @@ Patch4: 0005-Fix-Apple-CD-fixup.patch
 Patch5: 0006-Avoid-broken-uefi-fs.patch
 Patch6: 0007-fix-uefi-stride.patch
 Patch7: 0008-fix-gop.patch
+Patch100: grub-efi-0.97-automake.patch
 
 %description
 GRUB (Grand Unified Boot Loader) is an experimental boot loader
@@ -40,8 +37,7 @@ systems.
 
 %package efi
 Summary: GRUB bootloader for EFI systems
-Group: System Environment/Base
-Obsoletes: grub < 1:0.97-83
+Group: System/Kernel and hardware
 
 %description efi
 GRUB for EFI systems is a bootloader used to boot EFI systems.
@@ -58,11 +54,12 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 # Modify grub to show the full version number
 #sed -i 's/0\.97/%{version}-%{release}/' configure.in
 
+%apply_patches
+
 %build
-autoreconf
-autoconf
+aclocal ; autoheader ; automake -a ; autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -Werror -Wno-shadow -Wno-unused -fuse-ld=bfd"
+CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -fuse-ld=bfd"
 if [ "$GCCVERS" == "4" ]; then
 	CFLAGS="$CFLAGS -Wno-pointer-sign"
 fi
@@ -71,8 +68,7 @@ export CFLAGS
 make
 mv efi/grub.efi .
 make clean
-autoreconf
-autoconf
+aclocal ; autoheader ; automake -a ; autoconf
 CFLAGS="$CFLAGS -static" 
 export CFLAGS
 %configure --sbindir=/sbin --disable-auto-linux-mem-opt --datarootdir=%{_datadir}
@@ -82,25 +78,13 @@ make
 rm -fr $RPM_BUILD_ROOT
 %makeinstall sbindir=${RPM_BUILD_ROOT}/sbin
 mkdir -p ${RPM_BUILD_ROOT}/boot/grub
-mkdir -m 0755 -p ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/
-install -m 755 grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/rosa/grub.efi
+mkdir -m 0755 -p ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/
+install -m 755 grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
 
 %clean
 rm -fr $RPM_BUILD_ROOT
-
-%post
-if [ "$1" = 1 ]; then
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/grub.info.gz || :
-  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
-fi
-
-%preun
-if [ "$1" = 0 ] ;then
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/grub.info.gz || :
-  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/multiboot.info.gz || :
-fi
 
 %files
 %defattr(-,root,root)
@@ -119,10 +103,7 @@ fi
 
 %files efi
 %defattr(-,root,root)
-%attr(0755,root,root)/boot/efi/EFI/rosa
-/sbin/grub-terminfo
-/sbin/grub-md5-crypt
-/sbin/grub-crypt
+%attr(0755,root,root)/boot/efi/EFI/omdv
 
 %changelog
 * Fri Apr 27 2012 Matthew Garrett <mjg@redhat.com> - 0.97-93

@@ -1,0 +1,10 @@
+--- grub-efi-0.97/configure.in.bero	2013-05-09 22:12:45.413588278 +0200
++++ grub-efi-0.97/configure.in	2013-05-09 22:12:58.213428258 +0200
+@@ -56,6 +56,7 @@ fi
+ 
+ AC_CHECK_TOOL(CC, gcc)
+ AC_PROG_CC
++AM_PROG_AS
+ # We need this for older versions of Autoconf.
+ _AM_DEPENDENCIES(CC)
+ 
