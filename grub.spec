@@ -1,6 +1,6 @@
 Name: grub-efi
 Version: 0.97
-Release: 2
+Release: 3
 Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
