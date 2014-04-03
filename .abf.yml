@@ -1,2 +1,4 @@
 sources:
   "grub-efi-0.97.tar.gz": 0901bee5bc1291724bda504bae8f9a6fb334837d
+  grub-x86_32.efi: cfebadf093eb52c2628c92856c34dc5591ab5352
+  grub-x86_64.efi: 6ec77f2a934deff5527b80e295435354bda39e3a

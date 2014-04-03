@@ -1,6 +1,8 @@
+%define debug_package %{nil}
+
 Name: grub-efi
 Version: 0.97
-Release: 5
+Release: 6
 Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
@@ -16,6 +18,18 @@ Provides: bootloader
 
 URL: http://www.gnu.org/software/%{name}/
 Source0: ftp://alpha.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+
+# *** FIXME *** THIS IS EVIL
+# There is a problem in the grub-legacy codebase that prevents it
+# from working when built with a modern toolchain, even at -O0.
+# So for now, we'll overwrite grub.efi with a binary compiled with
+# a known old enough toolchain.
+# The source used is the exact same source found in this package.
+# Binaries are extracted from
+# http://abf-downloads.rosalinux.ru/rosa2012.1/repository/x86_64/main/release/grub-efi-0.97-94-rosa2012.1.x86_64.rpm
+# http://abf-downloads.rosalinux.ru/rosa2012.1/repository/i586/main/release/grub-efi-0.97-94-rosa2012.1.i586.rpm
+Source100: grub-x86_64.efi
+Source101: grub-x86_32.efi
 
 # This is from
 # http://git.kernel.org/?p=boot/grub-fedora/grub-fedora.git;a=summary
@@ -59,43 +73,43 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 %build
 aclocal ; autoheader ; automake -a ; autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-Os -static -g -fno-strict-aliasing -fno-stack-protector -fno-reorder-functions -Wl,--build-id=none -Wall -fuse-ld=bfd"
+CFLAGS="-O2 -fpic -g -fno-strict-aliasing -fno-stack-protector -fshort-wchar -ffreestanding -DGNU_EFI_USE_MS_ABI --std=gnu11 -Wl,--build-id=none -Wall -fuse-ld=bfd -Wl,--hash-style=sysv"
+%ifarch x86_64
+CFLAGS="$CFLAGS -mno-red-zone -mno-mmx"
+%endif
+%ifarch %ix86
+CFLAGS="$CFLAGS -mno-mmx -mno-sse"
+%endif
 if [ "$GCCVERS" == "4" ]; then
 	CFLAGS="$CFLAGS -Wno-pointer-sign"
 fi
 export CFLAGS
 %configure --sbindir=/sbin --disable-auto-linux-mem-opt --datarootdir=%{_datadir} --with-platform=efi
 make
-mv efi/grub.efi .
-make clean
-aclocal ; autoheader ; automake -a ; autoconf
-CFLAGS="$CFLAGS -static" 
-export CFLAGS
-%configure --sbindir=/sbin --disable-auto-linux-mem-opt --datarootdir=%{_datadir}
-make
 
 %install
-rm -fr $RPM_BUILD_ROOT
 %makeinstall sbindir=${RPM_BUILD_ROOT}/sbin
 mkdir -p ${RPM_BUILD_ROOT}/boot/grub
 mkdir -m 0755 -p ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/
-install -m 755 grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
+%ifarch x86_64
+install -c -m 755 %{SOURCE100} ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
+%else
+%ifarch %ix86
+install -c -m 755 %{SOURCE101} ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
+%else
+install -m 755 efi/grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
+%endif
+%endif
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
-
-%clean
-rm -fr $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog NEWS README COPYING TODO docs/menu.lst
 /boot/grub
-/sbin/grub
-/sbin/grub-install
 /sbin/grub-terminfo
 /sbin/grub-md5-crypt
 /sbin/grub-crypt
-%{_bindir}/mbchk
 %{_infodir}/grub*
 %{_infodir}/multiboot*
 %{_mandir}/man*/*
