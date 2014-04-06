@@ -2,7 +2,7 @@
 
 Name: grub-efi
 Version: 0.97
-Release: 6
+Release: 7
 Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
@@ -12,6 +12,7 @@ BuildRequires: binutils >= 2.9.1.0.23, ncurses-devel, ncurses, texinfo
 BuildRequires: autoconf /usr/lib/crt1.o automake
 BuildRequires: gnu-efi >= 3.0e-9
 BuildRequires: glibc glibc-static-devel
+BuildRequires: distro-theme-OpenMandriva imagemagick
 BuildRequires: git
 Requires: coreutils
 Provides: bootloader
@@ -73,7 +74,7 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 %build
 aclocal ; autoheader ; automake -a ; autoconf
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
-CFLAGS="-O2 -fpic -g -fno-strict-aliasing -fno-stack-protector -fshort-wchar -ffreestanding -DGNU_EFI_USE_MS_ABI --std=gnu11 -Wl,--build-id=none -Wall -fuse-ld=bfd -Wl,--hash-style=sysv"
+CFLAGS="-O2 -fpic -g -fno-strict-aliasing -fno-stack-protector -fshort-wchar -ffreestanding -DGNU_EFI_USE_MS_ABI --std=gnu11 -Wl,--build-id=none -Wall -fuse-ld=bfd -Wl,--hash-style=sysv -Wl,-O0 -Wl,--disable-new-dtags -Wl,-z,execstack"
 %ifarch x86_64
 CFLAGS="$CFLAGS -mno-red-zone -mno-mmx"
 %endif
@@ -102,6 +103,9 @@ install -m 755 efi/grub.efi ${RPM_BUILD_ROOT}/boot/efi/EFI/omdv/grub.efi
 %endif
 
 rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
+
+convert %{_datadir}/plymouth/themes/OpenMandriva/background.png %{buildroot}/boot/grub/splash.xpm
+gzip -9 %{buildroot}/boot/grub/splash.xpm
 
 %files
 %defattr(-,root,root)
