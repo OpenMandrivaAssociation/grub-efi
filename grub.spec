@@ -2,7 +2,7 @@
 
 Name: grub-efi
 Version: 0.97
-Release: 7
+Release: 8
 Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
