@@ -9,7 +9,7 @@ License: GPLv2+
 
 ExclusiveArch: x86_64 %ix86
 BuildRequires: binutils >= 2.9.1.0.23, ncurses-devel, ncurses, texinfo
-BuildRequires: autoconf /usr/lib/crt1.o automake
+BuildRequires: autoconf automake
 BuildRequires: gnu-efi >= 3.0e-9
 BuildRequires: glibc glibc-static-devel
 BuildRequires: git
