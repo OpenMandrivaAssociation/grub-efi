@@ -72,6 +72,11 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 
 %build
 aclocal ; autoheader ; automake -a ; autoconf
+
+#needs gnu as for a start
+export CC=gcc
+export CXX=g++
+
 GCCVERS=$(gcc --version | head -1 | cut -d\  -f3 | cut -d. -f1)
 CFLAGS="-O2 -fpic -g -fno-strict-aliasing -fno-stack-protector -fshort-wchar -ffreestanding -DGNU_EFI_USE_MS_ABI --std=gnu11 -Wl,--build-id=none -Wall -fuse-ld=bfd -Wl,--hash-style=sysv"
 %ifarch x86_64
