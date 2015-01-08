@@ -1,0 +1,14 @@
+--- ./stage2/sha512crypt.c.orig	2015-01-08 20:22:10.931960954 +0000
++++ ./stage2/sha512crypt.c	2015-01-08 20:22:55.779958222 +0000
+@@ -4,10 +4,9 @@
+ 
+ #include <stdbool.h>
+ #include <stddef.h>
+-
++#include <stdint.h>
+ #include <shared.h>
+ 
+-typedef unsigned long long uint64_t;
+ typedef size_t uintptr_t;
+ #define alloca(SIZE) (__builtin_alloca (SIZE))
+ #define UINT64_C(X) X ## ULL

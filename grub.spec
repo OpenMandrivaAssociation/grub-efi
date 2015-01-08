@@ -2,7 +2,7 @@
 
 Name: grub-efi
 Version: 0.97
-Release: 9
+Release: 10
 Summary: Grand Unified Boot Loader
 Group: System/Kernel and hardware
 License: GPLv2+
@@ -42,6 +42,7 @@ Patch5: 0006-Avoid-broken-uefi-fs.patch
 Patch6: 0007-fix-uefi-stride.patch
 Patch7: 0008-fix-gop.patch
 Patch100: grub-efi-0.97-automake.patch
+Patch101: grub-efi-0.97-stdint.patch
 
 %description
 GRUB (Grand Unified Boot Loader) is an experimental boot loader
