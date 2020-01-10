@@ -69,7 +69,7 @@ GRUB for EFI systems is a bootloader used to boot EFI systems.
 # Modify grub to show the full version number
 #sed -i 's/0\.97/%{version}-%{release}/' configure.in
 
-%apply_patches
+%autopatch -p1
 
 %build
 aclocal ; autoheader ; automake -a ; autoconf
