@@ -16,7 +16,7 @@ BuildRequires: git
 Requires: coreutils
 Provides: bootloader
 
-URL: http://www.gnu.org/software/%{name}/
+URL: https://www.gnu.org/software/%{name}/
 Source0: ftp://alpha.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 
 # *** FIXME *** THIS IS EVIL
